@@ -1,8 +1,8 @@
 variable "do_token" {}
 
 module "cluster" {
-  source = "../../modules/kube-digitalocean"
-  
+  source                     = "../../modules/kube-digitalocean"
+
   cluster_name               = "dev"
   cluster_default_node_size  = "s-2vcpu-4gb"
   cluster_default_node_count = 3
