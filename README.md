@@ -30,9 +30,12 @@ doctl auth init --access-token $DIGITALOCEAN_TOKEN
 brew install terraform
 ```
 
-## Usage - WIP
+## Setup and usage - WIP
 
 ```
+# Create a workspace
+terraform workspace new kube-digitalocean-dev-eu-central
+
 # Inspect a module's providers 
 terrafrom providers modules/kube-digitalocean
 
@@ -40,5 +43,27 @@ terrafrom providers modules/kube-digitalocean
 terraform init environments/dev/
 
 # Prepare a dry-run execution plan, detailing the resources to be deployed
-terraform plan -var "do_token=${DIGITALOCEAN_TOKEN}" environments/dev
+terraform plan -var "do_token=${DIGITALOCEAN_TOKEN}" -out dev.out environments/dev
+
+# Deploy configuration
+terraform apply "dev.out"
+
+# Configure your kube context using the following env var
+export KUBECONFIG=~/.kube/dev/config
+
+# Verify your kube context using either of the following
+kubectl config current-context
+kubectl config get-contexts
+
+# List nodes and cluster info
+kubectl get nodes
+kubectl cluster-info
 ```
+
+## Notes
+
+- Best practices recommends using [Terraform remote state](https://www.terraform.io/docs/state/remote.html).
+
+## References
+
+- [Terraform workspace naming conventions](https://www.terraform.io/docs/cloud/workspaces/naming.html)
